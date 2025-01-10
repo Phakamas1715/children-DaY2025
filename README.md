@@ -67,7 +67,7 @@ const ThaiChildrensDayForm = () => {
 
         {/* Form Header */}
         <h1 className="text-3xl text-center text-red-400 font-semibold mb-2 animate-bounce">
-          ลงทะเบียนวันเด็กแห่งชาติ
+          ลงทะเบียนวันเด็กแห่งชาติ ประจำปี พ.ศ.2568
         </h1>
         <p className="text-lg text-center text-purple-600 font-medium mb-2">
           "ทุกโอกาส คือ การเรียนรู้ พร้อมปรับตัวสู่อนาคตที่เลือกเอง"
@@ -261,7 +261,7 @@ const ThaiChildrensDayForm = () => {
       </div>
 
       <footer className="text-center text-gray-600 text-sm mt-8">
-        © 2568 งานวันเด็กแห่งชาติ | ศูนย์ฝึกกองทัพอากาศน้ำพอง จังหวัดขอนแก่น
+        © 2568 งานวันเด็กแห่งชาติ | ศูนย์การฝึกกองทัพอากาศน้ำพอง จังหวัดขอนแก่น
       </footer>
     </div>
   );
