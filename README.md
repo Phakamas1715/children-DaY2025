@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { X, Plus, MapPin, Home, Phone, Users, Globe, Send } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, Plus } from 'lucide-react';
 
 const ThaiChildrensDayForm = () => {
+  // State declarations
   const [formData, setFormData] = useState({
     parentName: '',
     parentPhone: '',
@@ -15,6 +16,7 @@ const ThaiChildrensDayForm = () => {
   const [showResult, setShowResult] = useState(false);
   const [registrationId, setRegistrationId] = useState('');
 
+  // Constants
   const districts = ['เมืองขอนแก่น', 'น้ำพอง', 'กระนวน', 'เขาสวนกวาง', 'อุบลรัตน์'];
 
   const activities = [
@@ -26,6 +28,7 @@ const ThaiChildrensDayForm = () => {
     { id: 'firstaid', label: '🏥 การปฐมพยาบาลเบื้องต้น (20 คะแนน)' }
   ];
 
+  // Handlers
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -57,7 +60,7 @@ const ThaiChildrensDayForm = () => {
     }));
   };
 
-  const handleActivityToggle = (activityId) => {
+  const toggleActivity = (activityId) => {
     setFormData(prev => ({
       ...prev,
       selectedActivities: prev.selectedActivities.includes(activityId)
@@ -68,8 +71,6 @@ const ThaiChildrensDayForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // สร้างรหัสลงทะเบียน 4 หลัก
     const uid = String(Math.floor(Math.random() * 9000) + 1000);
     
     try {
@@ -88,212 +89,190 @@ const ThaiChildrensDayForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-100 via-purple-100 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
-        {/* Flying Plane Animation */}
-        <div className="absolute top-10 left-0 w-full overflow-hidden pointer-events-none">
-          <div className="animate-fly">
-            <span className="text-4xl">✈️</span>
-          </div>
+    <div className="min-h-screen bg-gradient-to-br from-pink-100 via-purple-100 to-indigo-100 p-6">
+      <div className="max-w-2xl mx-auto bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-8 relative overflow-hidden">
+        {/* Decorative Elements */}
+        <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-red-400 via-yellow-400 to-blue-400" />
+        
+        <div className="text-center mb-8 animate__animated animate__bounceIn">
+          <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600">
+            ลงทะเบียนวันเด็กแห่งชาติ
+          </h1>
+          <h3 className="text-lg text-purple-600 mt-2">
+            ณ ศูนย์การฝึกกองทัพอากาศน้ำพอง จังหวัดขอนแก่น ปี 2568
+          </h3>
         </div>
 
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-8 space-y-8">
-          <div className="text-center space-y-4">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent animate-bounce">
-              ลงทะเบียนวันเด็กแห่งชาติ
-            </h1>
-            <h2 className="text-xl text-gray-600">
-              ณ ศูนย์การฝึกกองทัพอากาศน้ำพอง จังหวัดขอนแก่น ปี 2568
-            </h2>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Parent Information */}
+          <div className="space-y-4">
+            <h3 className="text-xl font-semibold text-purple-700 flex items-center gap-2">
+              ข้อมูลผู้ปกครอง
+            </h3>
+            
+            <input
+              type="text"
+              name="parentName"
+              value={formData.parentName}
+              onChange={handleInputChange}
+              placeholder="ชื่อ-นามสกุล"
+              className="w-full px-4 py-2 rounded-lg border border-purple-200 focus:border-purple-400 
+                        focus:ring-2 focus:ring-purple-200 outline-none transition-all duration-300"
+              required
+            />
+
+            <input
+              type="tel"
+              name="parentPhone"
+              value={formData.parentPhone}
+              onChange={handleInputChange}
+              placeholder="เบอร์โทรศัพท์"
+              className="w-full px-4 py-2 rounded-lg border border-purple-200 focus:border-purple-400 
+                        focus:ring-2 focus:ring-purple-200 outline-none transition-all duration-300"
+              required
+            />
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Parent Information */}
-            <div className="space-y-4">
-              <h3 className="text-xl font-semibold text-purple-700 flex items-center gap-2">
-                <Users className="w-5 h-5" />
-                ข้อมูลผู้ปกครอง
-              </h3>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input
-                  type="text"
-                  name="parentName"
-                  value={formData.parentName}
-                  onChange={handleInputChange}
-                  placeholder="ชื่อ-นามสกุล"
-                  className="input-field"
-                  required
-                />
-                <input
-                  type="tel"
-                  name="parentPhone"
-                  value={formData.parentPhone}
-                  onChange={handleInputChange}
-                  placeholder="เบอร์โทรศัพท์"
-                  className="input-field"
-                  required
-                />
-              </div>
-            </div>
+          {/* Address Information */}
+          <div className="space-y-4">
+            <h3 className="text-xl font-semibold text-purple-700 flex items-center gap-2">
+              ที่อยู่
+            </h3>
+            
+            <input
+              type="text"
+              name="address"
+              value={formData.address}
+              onChange={handleInputChange}
+              placeholder="บ้านเลขที่ / หมู่"
+              className="w-full px-4 py-2 rounded-lg border border-purple-200 focus:border-purple-400 
+                        focus:ring-2 focus:ring-purple-200 outline-none transition-all duration-300"
+              required
+            />
 
-            {/* Address Section */}
-            <div className="space-y-4">
-              <h3 className="text-xl font-semibold text-purple-700 flex items-center gap-2">
-                <MapPin className="w-5 h-5" />
-                ที่อยู่
-              </h3>
-              
-              <div className="space-y-4">
-                <input
-                  type="text"
-                  name="address"
-                  value={formData.address}
-                  onChange={handleInputChange}
-                  placeholder="บ้านเลขที่ / หมู่บ้าน"
-                  className="input-field"
-                  required
-                />
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <input
-                    type="text"
-                    name="subdistrict"
-                    value={formData.subdistrict}
-                    onChange={handleInputChange}
-                    placeholder="ตำบล"
-                    className="input-field"
-                    required
-                  />
-                  <select
-                    name="district"
-                    value={formData.district}
-                    onChange={handleInputChange}
-                    className="input-field"
-                    required
-                  >
-                    <option value="">เลือกอำเภอ</option>
-                    {districts.map(district => (
-                      <option key={district} value={district}>
-                        {district}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input
+                type="text"
+                name="subdistrict"
+                value={formData.subdistrict}
+                onChange={handleInputChange}
+                placeholder="ตำบล"
+                className="w-full px-4 py-2 rounded-lg border border-purple-200 focus:border-purple-400 
+                          focus:ring-2 focus:ring-purple-200 outline-none transition-all duration-300"
+                required
+              />
 
-            {/* Children Section */}
-            <div className="space-y-4">
-              <h3 className="text-xl font-semibold text-purple-700 flex items-center gap-2">
-                <Users className="w-5 h-5" />
-                ข้อมูลเด็ก
-              </h3>
-              
-              <div className="space-y-4">
-                {formData.children.map((child) => (
-                  <div key={child.id} className="flex items-center gap-4 group">
-                    <input
-                      type="text"
-                      value={child.name}
-                      onChange={(e) => updateChild(child.id, 'name', e.target.value)}
-                      placeholder="ชื่อ-นามสกุล"
-                      className="input-field flex-1"
-                      required
-                    />
-                    <input
-                      type="number"
-                      value={child.age}
-                      onChange={(e) => updateChild(child.id, 'age', e.target.value)}
-                      placeholder="อายุ"
-                      className="input-field w-24"
-                      min="1"
-                      max="15"
-                      required
-                    />
-                    <button
-                      type="button"
-                      onClick={() => removeChild(child.id)}
-                      className="p-2 text-red-500 hover:bg-red-100 rounded-full transition-colors duration-300"
-                    >
-                      <X className="w-5 h-5" />
-                    </button>
-                  </div>
+              <select
+                name="district"
+                value={formData.district}
+                onChange={handleInputChange}
+                className="w-full px-4 py-2 rounded-lg border border-purple-200 focus:border-purple-400 
+                          focus:ring-2 focus:ring-purple-200 outline-none transition-all duration-300"
+                required
+              >
+                <option value="">เลือกอำเภอ</option>
+                {districts.map(district => (
+                  <option key={district} value={district}>{district}</option>
                 ))}
-                
+              </select>
+            </div>
+          </div>
+
+          {/* Children Section */}
+          <div className="space-y-4">
+            <h3 className="text-xl font-semibold text-purple-700 flex items-center gap-2">
+              ข้อมูลเด็ก
+            </h3>
+
+            {formData.children.map(child => (
+              <div key={child.id} className="flex items-center gap-4 group">
+                <input
+                  type="text"
+                  value={child.name}
+                  onChange={(e) => updateChild(child.id, 'name', e.target.value)}
+                  placeholder="ชื่อ-นามสกุล"
+                  className="flex-1 px-4 py-2 rounded-lg border border-purple-200 focus:border-purple-400 
+                            focus:ring-2 focus:ring-purple-200 outline-none transition-all duration-300"
+                  required
+                />
+                <input
+                  type="number"
+                  value={child.age}
+                  onChange={(e) => updateChild(child.id, 'age', e.target.value)}
+                  placeholder="อายุ"
+                  className="w-24 px-4 py-2 rounded-lg border border-purple-200 focus:border-purple-400 
+                            focus:ring-2 focus:ring-purple-200 outline-none transition-all duration-300"
+                  required
+                />
                 <button
                   type="button"
-                  onClick={addChild}
-                  className="w-full py-2 px-4 border-2 border-dashed border-purple-300 rounded-lg
-                           hover:border-purple-400 hover:bg-purple-50 transition-all duration-300
-                           text-purple-600 font-medium flex items-center justify-center gap-2"
+                  onClick={() => removeChild(child.id)}
+                  className="p-2 text-red-500 hover:bg-red-100 rounded-full transition-colors duration-300"
                 >
-                  <Plus className="w-5 h-5" />
-                  เพิ่มข้อมูลเด็ก
+                  <X className="w-5 h-5" />
                 </button>
               </div>
-            </div>
+            ))}
 
-            {/* Activities Section */}
-            <div className="space-y-4">
-              <h3 className="text-xl font-semibold text-purple-700 flex items-center gap-2">
-                <Globe className="w-5 h-5" />
-                กิจกรรมที่สนใจ
-              </h3>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {activities.map((activity) => (
-                  <label
-                    key={activity.id}
-                    className="flex items-center gap-3 p-3 rounded-lg border border-purple-200
-                             hover:border-purple-400 hover:bg-purple-50 transition-all duration-300 cursor-pointer"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={formData.selectedActivities.includes(activity.id)}
-                      onChange={() => handleActivityToggle(activity.id)}
-                      className="w-5 h-5 rounded text-purple-500 focus:ring-purple-400"
-                    />
-                    <span>{activity.label}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
-
-            {/* Rewards Info */}
-            <div className="bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl p-6 border-2 border-dashed border-purple-200">
-              <h4 className="text-xl font-semibold text-center text-purple-700 mb-4">
-                🎁 เงื่อนไขการแลกรางวัล
-              </h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-white rounded-lg p-4 text-center shadow-md hover:shadow-lg transition-shadow">
-                  <div className="text-2xl font-bold text-purple-600">30-50 คะแนน</div>
-                  <div className="text-gray-600">แลกรับรางวัล</div>
-                </div>
-                <div className="bg-white rounded-lg p-4 text-center shadow-md hover:shadow-lg transition-shadow">
-                  <div className="text-2xl font-bold text-purple-600">100 คะแนน</div>
-                  <div className="text-gray-600">รางวัลพิเศษ</div>
-                </div>
-              </div>
-              <p className="text-center text-sm text-gray-500 mt-4">
-                * คะแนนจะแสดงหลังจากสแกน QR Code ในแต่ละฐาน
-              </p>
-            </div>
-
-            {/* Submit Button */}
             <button
-              type="submit"
-              className="w-full py-3 px-6 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-medium
-                       rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all
-                       duration-300 flex items-center justify-center gap-2"
+              type="button"
+              onClick={addChild}
+              className="w-full py-2 px-4 border-2 border-dashed border-purple-300 rounded-lg
+                       hover:border-purple-400 hover:bg-purple-50 transition-all duration-300
+                       text-purple-600 font-medium flex items-center justify-center gap-2"
             >
-              <Send className="w-5 h-5" />
-              ลงทะเบียน
+              <Plus className="w-5 h-5" />
+              เพิ่มข้อมูลเด็ก
             </button>
-          </form>
+          </div>
 
-          {/* Result Modal */}
-          {showResult && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-              <div className="bg-white rounded-2xl p-8 max-w-md w-full animate-scale-up">
-                <h3 className="text-2xl font-bold text-center text
+          {/* Activities Section */}
+          <div className="space-y-4">
+            <h3 className="text-xl font-semibold text-purple-700 flex items-center gap-2">
+              กิจกรรมที่สนใจ
+            </h3>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {activities.map(activity => (
+                <label
+                  key={activity.id}
+                  className="flex items-center gap-3 p-3 rounded-lg border border-purple-200
+                           hover:border-purple-400 hover:bg-purple-50 transition-all duration-300 cursor-pointer"
+                >
+                  <input
+                    type="checkbox"
+                    checked={formData.selectedActivities.includes(activity.id)}
+                    onChange={() => toggleActivity(activity.id)}
+                    className="w-5 h-5 rounded text-purple-500 focus:ring-purple-400"
+                  />
+                  <span>{activity.label}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {/* Rewards Information */}
+          <div className="bg-gradient-to-r from-pink-50 to-purple-50 p-6 rounded-lg border border-purple-200">
+            <h4 className="text-xl font-semibold text-purple-700 mb-4 text-center">
+              🎁 เงื่อนไขการแลกรางวัล
+            </h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="p-4 bg-white rounded-lg shadow-sm text-center">
+                <div className="text-xl font-bold text-purple-600">30-50 คะแนน</div>
+                <div className="text-gray-600">แลกรับรางวัล</div>
+              </div>
+              <div className="p-4 bg-white rounded-lg shadow-sm text-center">
+                <div className="text-xl font-bold text-purple-600">100 คะแนน</div>
+                <div className="text-gray-600">รางวัลพิเศษ</div>
+              </div>
+            </div>
+            <p className="text-sm text-gray-500 text-center mt-4">
+              * คะแนนจะแสดงหลังจากสแกน QR Code ในแต่ละฐาน
+            </p>
+          </div>
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className="w-full py-3 px-6 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-medium
+                     rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all
